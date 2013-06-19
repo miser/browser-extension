@@ -1,0 +1,49 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title></title>
+        <link rel="stylesheet" href="css/options.css" type="text/css" />
+    </head>
+    <body>
+        <div class="wrapper">
+            <a href="http://www.mknote.com" class="logo" target="_blank"></a>
+            <div class="settings">
+                <h2 class="title message" message="OptionsText"></h2>
+                <div class="content">
+                    <ul>
+                        <li>
+                            <div class="optionname message" message="SerializeImgText"></div>
+                            <div class="optionset">
+                                <p class="tiptext"><label><input type="checkbox" name="retrieveremoteimage" checked="checked" /><span class="message" message="SerializeImgDes"></span></label></p>
+                                <p class="tiptext2 message" message="SerializeImgTipDes"></p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="optionname message" message="ImageAttachmentText"></div>
+                            <div class="optionset">
+                                <p class="tiptext"><label><input type="checkbox" name="imageattachment" /><span class="message" message="ImageAttachmentDes"></span></label></p>
+                            </div>
+                        </li>
+                        <li>
+                            <div class="optionname message" message="AutoExtractContentText"></div>
+                            <div class="optionset">
+                                <p class="tiptext"><label><input type="checkbox" name="autoextract" checked="checked" /><span class="message" message="AutoExtractContentDes"></span></label></p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <h2 class="title message" message="ShortCutText" style="margin-top:40px;"></h2>
+                <div class="content">
+                    <ul>
+                        <li class="message" message="ShortCutDes"></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright message" message="CopyRightText"></div>
+        </div>
+        <script src="js/lib/jquery-1.7.2.min.js"></script>
+        <script src="js/mknote.namespace.js"></script>
+        <script src="js/mknote.optionsinner.js"></script>
+    </body>
+</html>

@@ -1,0 +1,96 @@
+﻿<?xml version="1.0"?>
+
+<!DOCTYPE overlay SYSTEM  "chrome://newmknotewebclipper/locale/webclipper.dtd">
+
+<overlay id="mknotewebclipper-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/lib/jquery-1.7.2.min.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.namespace.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.i18n.js" />
+
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.aop.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.util.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.contextmenu.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.tab.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.user.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.initialization.js" />
+
+
+    <stringbundleset id="stringbundleset">
+        <stringbundle id="mknotewebclipper-stringbundle" src="chrome://newmknotewebclipper/locale/mknotewebclipper.properties" />
+    </stringbundleset>
+    
+    <toolbarpalette id="BrowserToolbarPalette">
+        <toolbarbutton id="mknotewebclipper-toolbar" label="&mknotewebclipper.name;"
+            class="toolbarbutton-1 chromeclass-toolbar-additional"
+            tooltiptext="&mknotewebclipper.toolbartip;"
+            oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'newnote');">
+            <stack>
+                <image class="toolbarbutton-icon" left="0" top="0"/>
+                <label value="la" top="13" left="5" right="0" class="big toolbar-value"/>
+                <label value="lb" top="10" left="5" right="0" class="small toolbar-value"/>
+            </stack>
+            <label class="toolbarbutton-text" crop="right" value="&mknotewebclipper.name;" />
+        </toolbarbutton>
+    </toolbarpalette>
+    
+    <!-- Tools menu -->
+    <menupopup id="menu_ToolsPopup">
+      <menuitem id="mknotewebclipper-menu"
+        label="&mknotewebclipper.name;"
+        image="chrome://newmknotewebclipper/content/images/icons/16x16.png"
+        class="menuitem-iconic"
+        insertbefore="devToolsEndSeparator"
+        oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'newnote');">
+      </menuitem>
+    </menupopup>
+  
+  <!-- Context menu -->
+  <popup id="contentAreaContextMenu">
+    <menuseparator id="mknotewebclipper-contextmenu-sep"/>
+    <menu id="mknotewebclipper-context-menu"
+      label="&mknotewebclipper.name;"
+      image="chrome://newmknotewebclipper/content/images/icons/16x16.png"
+      class="menu-iconic"
+      insertbefore="devToolsEndSeparator">
+      <menupopup>
+        <menuitem id="mknotewebclipper-contextmenu-selection"
+          label="&mknotewebclipper.menu.selection;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'selection');" />
+        <menuitem id="mknotewebclipper-contextmenu-weibo"
+          label="&mknotewebclipper.menu.weibo;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'com.weibo');" />
+        <menuitem id="mknotewebclipper-contextmenu-douban"
+          label="&mknotewebclipper.menu.douban;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'com.douban');" />
+        <menuitem id="mknotewebclipper-contextmenu-curimage"
+          label="&mknotewebclipper.menu.curimage;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'curimage');" />
+        <menuitem id="mknotewebclipper-contextmenu-curlink"
+          label="&mknotewebclipper.menu.curlink;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'curlink');" />
+        <menuitem id="mknotewebclipper-contextmenu-content"
+          label="&mknotewebclipper.menu.content;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'content');" />
+        <menuitem id="mknotewebclipper-contextmenu-links"
+          label="&mknotewebclipper.menu.links;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'links');" />
+        <menuitem id="mknotewebclipper-contextmenu-images"
+          label="&mknotewebclipper.menu.images;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'images');" />
+        <menuseparator id="mknotewebclipper-contextmenu-sep-sub1"/>
+        <menuitem id="mknotewebclipper-contextmenu-url"
+          label="&mknotewebclipper.menu.url;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'url');" />
+        <menuseparator id="mknotewebclipper-contextmenu-sep-sub2"/>
+        <menuitem id="mknotewebclipper-contextmenu-newnote"
+          label="&mknotewebclipper.menu.newnote;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'newnote');" />
+        <menuseparator id="mknotewebclipper-contextmenu-sep-sub3"/>
+        <menuitem id="mknotewebclipper-contextmenu-serializeimage" type="checkbox" checked="true"
+          label="&mknotewebclipper.menu.serializeimage;"
+          oncommand="MKNoteWebclipper.Initialization.menuActionSwitcher(event, 'serializeimage');" />
+      </menupopup>
+    </menu>
+  </popup>
+</overlay>

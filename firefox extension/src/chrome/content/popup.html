@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+	<title>MaiKu Web Clipper Popup Page</title>
+        <link rel="stylesheet" href="css/jquery.tagme.css" />
+        <link rel="stylesheet" href="css/popup.css" />
+    </head>
+    <body>
+        <div class="popupwrap">
+            <div class="content" id="content">
+                <div class="top">
+                    <a href="http://note.sdo.com" class="logo message" message="html:GoMaikuHomePage|title:GoMaikuHomePage" target="_blank"></a>
+                    <div class="topcorner">
+                        <a class="optionbtn message" id="optionbtn" message="title:HelpText" href="http://note.sdo.com/u/mknoteteam/n/P9LuU~k4w5nFnM1qs000VF" target="_blank"></a>
+                        <a class="closebtn message" id="closebtn" message="title:CloseText"></a>
+                    </div>
+                    <ul class="mkbm-utils" id="mkbm-utils">
+                        <li class="mkbm-auto-extract mkbm-util-item">
+                            <a class="mkbm-util-icon mkbm-enable message" message="title:AutoExtractContentEnabled"></a>
+                        </li>
+                        <li class="mkbm-panel-position mkbm-util-item">
+                            <a class="mkbm-util-icon mkbm-up message" message="title:GoBottom"></a>
+                        </li>
+			<li class="mkbm-mouse-select mkbm-util-item">
+                            <a class="mkbm-util-icon mkbm-enable message" message="title:DisableMouseSelect"></a>
+                        </li>
+                    </ul>
+                    <ul class="mkbm-downloads">
+                        <li class="mkbm-util-item"><a href="http://download.note.sdo.com/res/fe9751d0-361e-43ee-b2a3-9c1609987cfd" class="mkbm-util-icon pc message" message="title:DownloadPC"></a></li>
+                        <li class="mkbm-util-item"><a target="_blank" href="http://itunes.apple.com/cn/app/id429863467" class="mkbm-util-icon iphone message" message="title:DownloadIPhone"></a></li>
+                        <li class="mkbm-util-item"><a href="http://download.note.sdo.com/res/4ccd17f8-5bbc-496c-97cc-bdfb82790756" class="mkbm-util-icon android message" message="title:DownloadAndroid"></a></li>
+                        <li class="normaltext"><a target="_blank" href="http://note.sdo.com/download" class="message" message="title:MoreDownload"><span class="message" message="MoreText"></span><em>>></em></a></li>
+                    </ul>
+                </div>
+                <div class="title">
+                    <input id="titleinp" class="message" message="title:NoteTitle|placeholder:NoteTitle" />
+                </div>
+                <div class="not-selectable mkbm-extra" id="mkbm-extra">
+                    <div class="mkbm-category">
+                        <div class="mkbm-category-show message" message="title:NotLoginCategoryTitle"><span></span></div>
+                        <ul class="mkbm-category-select"></ul>
+                    </div>
+                    <div class="mkbm-tags">
+			<div class="mkbm-tagme">
+			    <ul class="mkbm-tagme-container">
+			    </ul>
+			</div>
+		    </div>
+                </div>
+                <div class="notecontentwrap" id="notecontentwrap">
+                    <div id="notecontent" contenteditable="true" class="notecontent"></div>
+                </div>
+		<div class="resizer" id="resizer"></div>
+                <div class="bottom">
+                    <div class="mkbm-account-info">
+                        <a class="username message" message="NotLoginMaiku" id="username" title="" href="#" target="_blank"></a><span class="logoutwrap">（<a class="logout message" message="html:ChangeAccountTitle|title:ChangeAccountTitle" id="logout" href="#"></a>）</span>
+                    </div>
+                    <a class="btn resetbtn message" message="html:ResetButtonText|title:ResetTitle" id="resetbtn"></a>
+                    <a class="btn savebtn message" message="html:SaveNoteButtonText|title:SaveNoteTitle" id="savebtn"></a>
+                </div>
+            </div>
+        </div>
+	<script src="js/lib/jquery-1.7.2.min.js"></script>
+	<script src="js/lib/jquery.tagme.js"></script>
+	<script src="js/mknote.namespace.js"></script>
+	<script src="js/mknote.popupinner.js"></script>
+    </body>
+</html>

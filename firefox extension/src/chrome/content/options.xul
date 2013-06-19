@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="chrome://global/skin/" type="text/css"?>
+        
+<!DOCTYPE prefwindow SYSTEM "chrome://newmknotewebclipper/locale/options.dtd">
+        
+<prefwindow id="mknotewebclipper-preferences"
+    onload="MKNoteWebclipper.Options.init()"
+    title="&title;"
+    buttons="false"
+    xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
+    <prefpane id="pane1" label="&title;">
+        <stringbundleset id="stringbundleset">
+            <stringbundle id="newmknotewebclipper-i18n" src="chrome://newmknotewebclipper/locale/mknotewebclipper.properties"/>
+        </stringbundleset>
+        <iframe id="mknotewebclipperoptions" src="chrome://newmknotewebclipper/content/options.html" style="padding:0px;margin:0px;height:1000px;"/>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/lib/jquery-1.7.2.min.js"></script>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.namespace.js"></script>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.i18n.js"></script>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.util.js"></script>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.filemanager.js"></script>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.settings.js"></script>
+        <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.options.js"></script>
+    </prefpane>
+</prefwindow>

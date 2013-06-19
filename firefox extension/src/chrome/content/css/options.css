@@ -1,0 +1,70 @@
+﻿*{padding:0;margin:0;}
+body{
+    background-color:#fff;
+    color:#666;
+    font-size:12px;
+    font-family:"\5FAE\8F6F\96C5\9ED1"/*yahei*/,sans-serif/*for mac*/;
+    overflow:auto;
+}
+.not-selectable{
+    -moz-user-select:none;
+    user-select:none;
+}
+
+.wrapper{
+    width:644px;
+    margin:12px auto 0;
+}
+.logo{
+    background:url(images/jianjilogo.png) no-repeat;
+    display:block;
+    width:178px;
+    height:69px;
+    margin:0 auto;
+}
+.settings{
+    margin:12px auto 0;
+    padding:10px;
+}
+.settings h2{
+    font-size:18px;
+    text-align:center;
+    border-bottom:1px dotted #ccc;
+    padding-bottom:10px;
+}
+.content{
+    margin:0 8px;
+}
+.content li{
+    overflow:hidden;
+    list-style:none;
+    margin:8px 0 16px;
+}
+.content .tiptext{
+    margin-bottom:8px;
+}
+.content .tiptext2{
+    margin-bottom:8px;
+    color:#888;
+}
+.content label input{
+    margin-right:8px;
+    vertical-align:middle;
+}
+.content label span{
+    display:inline-block;
+    vertical-align:middle;
+}
+.content .optionname{
+    float:left;
+    width:130px;
+    margin-top:2px;
+}
+.content .optionset{
+    float:left;
+    width:460px;
+}
+.copyright{
+    text-align:center;
+}
+
