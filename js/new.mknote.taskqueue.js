@@ -95,12 +95,10 @@
 		}
 
 		function nextTask() {
-			console.log( (currentTask ?  currentTask.name : '') + ':nextTask')
 			clearTimeout(nextTaskTimer);
 			nextTaskTimer = setTimeout(function() {
-				console.log('x')
 				TaskQueue.start();
-			}, 1000 * 1);
+			}, 1000 * 5);
 		}
 
 		/**
@@ -132,30 +130,22 @@
 				});
 			},
 			start: function() {
-				console.log(currentTask)
 				if (currentTask) return;
 
 				currentTask = queue.shift();
 				if (!currentTask) return;
 
-				console.log(currentTask.name)
-
 				//每隔5秒执行下个任务不然短时间一直请求服务器，服务器会认为非法
 				currentTask.sync(function() {
-					console.log((currentTask ?  currentTask.name : '') + ':sync')
 					nextTask();
 				})
 			},
 			end: function() {
-				// console.log(taskState)
 				if (!currentTask) {
-					console.log((currentTask ?  currentTask.name : '') + ':end')
-					nextTask();
 					return;
 				}
 
 				var taskState = currentTask.verifyCompleted();
-
 				if (taskState.state == TaskQueue.TaskSuccess) {
 					performanceByProcess(null, null, null);
 				} else if (taskState.state == TaskQueue.TaskFailOnce) {
@@ -165,11 +155,13 @@
 				}
 
 				if (taskState.state == TaskQueue.TaskSuccess || taskState.state == TaskQueue.TaskFailOnce || taskState.state == TaskQueue.TaskFail) {
-					console.log('currentTask = null')
 					currentTask = null;
 					nextTask();
 					return;
 				}
+			},
+			getErrorQueue: function() {
+				return [];
 			}
 		}
 	}();

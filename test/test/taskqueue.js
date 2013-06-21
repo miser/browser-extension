@@ -18,8 +18,11 @@ describe('mknote.taskqueue tests', function() {
 	})
 
 	describe('用户信息验证失败', function() {
-		it('添加一条任务后不会触发TaskQueue.start', function() {
+		beforeEach(function() {
 			sinon.stub(User, "insureLogin", function(callback) {});
+		});
+
+		it('添加一条任务后不会触发TaskQueue.start', function() {
 			sinon.spy(TaskQueue, "start");
 			TaskQueue.add({})
 			TaskQueue.start.callCount.should.equal(0)
@@ -27,73 +30,99 @@ describe('mknote.taskqueue tests', function() {
 	})
 
 	describe('用户信息验证成功', function() {
-		this.timeout(1000 * 60);
-		// it('添加一条任务后会触发一次TaskQueue.start', function() {
-		// 	sinon.stub(User, "insureLogin", function(callback) {
-		// 		callback();
-		// 	});
-		// 	sinon.spy(TaskQueue, "start");
-		// 	var task = new Task();
-		// 	sinon.stub(task, "sync", function(callback) {
-		// 		this.end('success')
-		// 		callback && callback()
-		// 	});
-		// 	TaskQueue.add(task);
-		// 	TaskQueue.start.calledOnce.should.equal(true)
-		// })
-		it('test', function() {
+		
+
+		var spyStart , spyEnd;
+
+		function sync(callback) {
+			var self = this;
+			setTimeout(function() {
+				self.end('success');
+				callback && callback();
+			}, 1000 * 10)
+		}
+
+		beforeEach(function() {
+
+			spyStart = sinon.spy(TaskQueue, "start");
+			spyEnd = sinon.spy(TaskQueue, "end");
+
 			sinon.stub(User, "insureLogin", function(callback) {
 				callback();
 			});
-			var spyStart = sinon.spy(TaskQueue, "start");
-			var spyEnd = sinon.spy(TaskQueue, "end");
+		});
+
+		afterEach(function(){
+			spyStart.restore();
+			spyEnd.restore();
+		})
+
+
+		it('添加一条任务后会触发一次TaskQueue.start', function() {
+			var task = new Task();
+			sinon.stub(task, "sync", function(callback) {
+				this.end('success')
+				callback && callback()
+			});
+			TaskQueue.add(task);
+			TaskQueue.start.calledOnce.should.equal(true)
+		})
+		it('一条任务完成后添加另一条任务', function() {
 			var task1 = new Task();
 			var task2 = new Task();
-			task1.name = 'task1';
-			task2.name = 'task2';
 
-			var count = 0;
-
-			function sync(callback) {
-				var self = this;
-				setInterval(function() {
-					self.end('success');
-					// console.log(callback)
-					callback && callback();
-				}, 1000 * 1)
-			}
 			sinon.stub(task1, "sync", sync);
 			sinon.stub(task2, "sync", sync);
 
 			TaskQueue.add(task1);
 			clock.tick(0);
-			TaskQueue.start.calledOnce.should.equal(true)
+			TaskQueue.start.calledOnce.should.equal(true);
+
+			clock.tick(1000 * 10);
+			TaskQueue.end.calledOnce.should.equal(true);
+
+			clock.tick(1000 * 5);
+			TaskQueue.start.callCount.should.equal(2);
 
 			TaskQueue.add(task2);
 			clock.tick(0);
+			TaskQueue.start.callCount.should.equal(3);
+
+			clock.tick(1000 * 10);
+			TaskQueue.end.callCount.should.equal(2);
+
+			clock.tick(1000 * 5);
+			TaskQueue.start.callCount.should.equal(4);
+
+			TaskQueue.end.callCount.should.equal(2);
+		});
+		it('连续添加2条任务', function() {
+			var task1 = new Task();
+			var task2 = new Task();
+
+			sinon.stub(task1, "sync", sync);
+			sinon.stub(task2, "sync", sync);
+
+			TaskQueue.add(task1);
+			clock.tick(0);
+			TaskQueue.start.calledOnce.should.equal(true);
+
+			TaskQueue.add(task2);
+			clock.tick(100);
 			TaskQueue.start.callCount.should.equal(2);
 
-			clock.tick(1000 * 1);
-			TaskQueue.end.calledOnce.should.equal(true)
-			clock.tick(1000 * 2);
-			// TaskQueue.start.callCount.should.equal(3);
+			clock.tick(1000 * 10 - 100);
+			TaskQueue.end.calledOnce.should.equal(true);
 
-			// clock.tick(1000 * 10);
-			// TaskQueue.start.callCount.should.equal(3);
-			// TaskQueue.end.callCount.should.equal(2);
+			clock.tick(1000 * 5);
+			TaskQueue.start.callCount.should.equal(3);
 
-			// setInterval(done, 1000 * 20)
+			clock.tick(1000 * 10);
+			TaskQueue.end.callCount.should.equal(2);
 
-			// clock.tick(0);
-			// TaskQueue.start.callCount.should.equal(2)
-			// TaskQueue.end.callCount.should.equal(2)
-			// clock.tick(5000);
-			// TaskQueue.start.callCount.should.equal(3)
-			// clock.tick(99);
-			// assert(callback.notCalled);
-
-			// clock.tick(1);
-			// assert(callback.calledOnce);
+			clock.tick(1000 * 1000);
+			TaskQueue.start.callCount.should.equal(4);
+			TaskQueue.end.callCount.should.equal(2);
 		})
 	})
 });
