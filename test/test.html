@@ -6,40 +6,45 @@
 </head>
 <body>
   <div id="mocha"></div>
+  <!-- lib -->
+  <script src="../js/lib/underscore.js"></script>
+  <script src="../js/lib/backbone.js"></script>
+  <script src="../js/lib/jquery-1.7.2.min.js"></script>
+
   <!-- test lib -->
   <script src="mocha.js"></script>
   <script src="chai.js"></script>
   <script src="sinon-chai.js"></script>
   <script src="sinon.js"></script>
   <script type="text/javascript">
+    mocha.setup('bdd')
     expect = chai.expect;
     should = chai.should();
   </script>
 
-
-  <!-- lib -->
-  <script src="../js/lib/underscore.js"></script>
-  <script src="../js/lib/backbone.js"></script>
-  <script src="../js/lib/jquery-1.7.2.min.js"></script>
-
   <!-- extension -->
   <script src="../js/mknote.namespace.js" async="false" defer="true"></script>
   <script src="../js/new.mknote.util.js" async="false" defer="true"></script>
+  <script src="../js/new.mknote.http.js" async="false" defer="true"></script>
+  <script src="../js/new.mknote.filesystem.js" async="false" defer="true"></script>
   <script src="../js/new.mknote.event.js" async="false" defer="true"></script>
-  <script src="../js/new.mknote.user.js" async="false" defer="true"></script>
-  <script src="../js/new.mknote.note.js" async="false" defer="true"></script>
-  <script src="../js/new.mknote.task.js" async="false" defer="true"></script>
-
+  <script src="../js/new.mknote.options.js" async="false" defer="true"></script>
   <script src="../js/new.mknote.i18n.js"  async="false" defer="true"></script>
   <script src="../js/new.mknote.tips.js"  async="false" defer="true"></script>
+  <script src="../js/new.mknote.user.js" async="false" defer="true"></script>
+  <script src="../js/new.mknote.image.js" async="false" defer="true"></script>
+  <script src="../js/new.mknote.note.js" async="false" defer="true"></script>
+  <script src="../js/new.mknote.task.js" async="false" defer="true"></script>
 
   <script src="../js/new.mknote.taskqueue.js"  async="false" defer="true"></script>
   <!-- test -->
   <script src="test/tips.js" async="false" defer="true"></script>
   <script src="test/taskqueue.js" async="false" defer="true"></script>
-  <script>mocha.setup('bdd')</script>
+  <script src="test/note.js" async="false" defer="true"></script>
   <script>
-    // mocha.run();
+  // $(function(){
+  //   mocha.run();
+  // })
   </script>
 </body>
 </html>

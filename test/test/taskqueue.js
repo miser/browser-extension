@@ -30,9 +30,9 @@ describe('mknote.taskqueue tests', function() {
 	})
 
 	describe('用户信息验证成功', function() {
-		
 
-		var spyStart , spyEnd;
+
+		var spyStart, spyEnd;
 
 		function sync(callback) {
 			var self = this;
@@ -52,7 +52,7 @@ describe('mknote.taskqueue tests', function() {
 			});
 		});
 
-		afterEach(function(){
+		afterEach(function() {
 			spyStart.restore();
 			spyEnd.restore();
 		})

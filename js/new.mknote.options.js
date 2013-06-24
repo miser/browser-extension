@@ -1,4 +1,4 @@
-﻿;
+;
 (function(undefined) {
 	var getOption = function(key, defaultValue) {
 		var options = MKNoteWebclipper.options.settings || {};
