@@ -3,8 +3,9 @@
 	var scriptRegex = /<script[^>]*>(.|\n)*?<\/script>/ig
 	var HTTP = MKNoteWebclipper.HTTP,
 		Tips = MKNoteWebclipper.Tips,
+		MKImage = MKNoteWebclipper.Image,
+		MKImages = MKNoteWebclipper.Images,
 		options = MKNoteWebclipper.options;
-
 
 	var Note = MKNoteWebclipper.Note = function(noteData, option, state) {
 		var defaultData = {
@@ -23,49 +24,71 @@
 		this.note = {};
 
 		$.extend(this.note, defaultData, noteData);
+		var notecontent = this.note.notecontent;
+		notecontent = notecontent.replace(scriptRegex, '');
+		//防止noteContent的标签是img开头
+		//导致$(noteContent).find('img')无法查到内容
+		this.noteEl = $('<div></div>').append(notecontent);
+		this.note.notecontent = notecontent = this.noteEl.html();
 
-		var noteContent = this.note.notecontent;
-		noteContent = noteContent.replace(scriptRegex, '');
-		this.noteEl = $('<div></div>').append(noteContent);
+		this.syncState = new MKNoteWebclipper.Event;
 
-		if (!state) {
-			this.syncState = {};
-			this.syncState.setState = function() {};
-		} else {
-			this.syncState = state;
-		}
+		// if (!state) {
+		// 	this.syncState = {};
+		// 	this.syncState.setState = function() {};
+		// } else {
+		// 	this.syncState = state;
+		// }
 	}
 
 	Note.prototype.generate = function() {
 		var self = this,
-			option = self.option,
 			content = self.note.notecontent;
 
 		//初始化笔记将上传内容清空
 		self.note.notecontent = '';
-
-		Tips.showPersistent('noteInit', self.note.title);
+		Tips.showPersistent('noteInit', {
+			content: self.note.title
+		});
 
 		var events = {
 			load: function(data) {
 				self.note.noteid = data.Note.NoteID;
 				self.note.notecontent = content;
-				Tips.showPersistent('noteInitSuccess', self.note.title);
+				Tips.showPersistent('noteInitSuccess', {
+					content: self.note.title
+				});
 				self.syncState.setState('note.init.success', arguments);
 			},
 			error: function() {
-				Tips.showPersistent('noteInitFail', self.note.title);
+				Tips.showPersistent('noteInitFail', {
+					content: self.note.title
+				});
 				self.syncState.setState('note.init.fail', arguments);
 			}
 		}
 
-		HTTP.post(option.baseUrl + "/note/save", events, JSON.stringify(self.note));
+		HTTP.post(self.option.baseUrl + "/note/save", events, JSON.stringify(self.note));
 
+	}
+
+	Note.prototype.saveContent = function() {
+		var self = this;
+		// self.note.notecontent = self.noteEl.html();
+		var events = {
+			load: function(data) {
+				self.syncState.setState('save.saveContent.success', arguments);
+			},
+			error: function() {
+				self.syncState.setState('save.saveContent.fail', arguments);
+			}
+		}
+		HTTP.post(self.option.baseUrl + "/note/save", events, JSON.stringify(self.note));
 	}
 
 	Note.prototype.saveImage = function() {
 		var self = this;
-		Tips.showPersistent('saveImages', self.note.title);
+		Tips.showPersistent('saveImages');
 		self.saveImages();
 	}
 
@@ -85,12 +108,12 @@
 				var obj = {};
 				obj[img.src] = 1;
 				filteredImg.push(obj);
-				self.images.push(new MkSyncImage(img));
+				self.images.push(new MKImage(img));
 			}
 		}
 		if (self.images.length) {
-			Tips.showPersistent('uploadImages');
-			var syncImages = new MkSyncImages(note, self.images, option);
+			// Tips.showPersistent('uploadImages');
+			var syncImages = new MKImages(note, self.images, option);
 			syncImages.upload(function(htmlImages, serverImages) {
 				for (var i = 0; i < serverImages.length; i++) {
 					var serverQueueItem = serverImages[i],
@@ -111,5 +134,7 @@
 			self.syncState.setState('save.images.success')
 		}
 	}
+
+
 
 })(MKNoteWebclipper.jQuery);

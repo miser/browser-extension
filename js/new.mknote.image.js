@@ -11,40 +11,39 @@
 		var self = this;
 		var image = self.image,
 			url = image.src;
-		var req = {};
-		req.responseType = 'arraybuffer';
-		req.onerror = function() {
-			errFn && errFn(self, arguments);
-			console.log('retrieve remote image xhr onerror')
-		}
-		req.onabort = function() {
-			errFn && errFn(self, arguments);
-			console.log('retrieve remote image xhr onabort')
-		}
-		req.onload = function(e) {
-			if (this.status == 200 || this.status == 304) {
-				var suffix = url.split('.'),
-					blob = new Blob([this.response], {
-						type: 'image/' + suffix[suffix.length - 1]
-					}),
-					parts = url.split('/'),
-					fileName = parts[parts.length - 1];
-
-				if (this.response == null) {
-					noResponse && noResponse(self)
-					return;
-				}
-
-				FS.create(this.response.byteLength, fileName, blob, function(file) {
-					callback && callback(self, file)
-				})
-			} else if (this.status != 404) {
+		var params = {};
+		params.responseType = 'arraybuffer';
+		var events = {
+			error: function(data) {
 				errFn && errFn(self, arguments);
-			} else {
-				err404 && err404(self)
+			},
+			load: function() {
+				if (this.status == 200 || this.status == 304) {
+					console.log(this)
+					var suffix = url.split('.'),
+						blob = new Blob([this.response], {
+							type: 'image/' + suffix[suffix.length - 1]
+						}),
+						parts = url.split('/'),
+						fileName = parts[parts.length - 1];
+
+					if (this.response == null) {
+						noResponse && noResponse(self)
+						return;
+					}
+
+					FS.create(this.response.byteLength, fileName, blob, function(file) {
+						console.log('FS')
+						callback && callback(self, file)
+					})
+				} else if (this.status != 404) {
+					errFn && errFn(self, arguments);
+				} else {
+					err404 && err404(self)
+				}
 			}
 		}
-		HTTP.get(url, req);
+		HTTP.get(url, events, params);
 	}
 
 	var MKImages = MKNoteWebclipper.Images = function(note, syncImageAry, option) {
@@ -233,4 +232,4 @@
 		}
 	}
 
-});
+})();

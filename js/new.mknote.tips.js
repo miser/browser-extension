@@ -55,13 +55,13 @@
 
 		function getContent(key, options) {
 			if (!(options instanceof Object)) {
-				return null;
+				options = {};
 			}
 
 			var content = options.content;
 
 			if (!content) {
-				return '';
+				content = '';
 			}
 
 			if (typeof content == 'string') {
