@@ -1,6 +1,4 @@
-﻿//@huntbao @mknote
-//All right reserved
-;(function(){
+﻿;(function(){
     if(typeof MKNoteWebclipper == 'undefined'){
         MKNoteWebclipper = {}; 
     }

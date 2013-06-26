@@ -23,6 +23,8 @@
 		noteData = noteData || {};
 		this.note = {};
 
+		this.option.baseUrl = this.option.baseUrl || MKNoteWebclipper.options.baseUrl;
+
 		$.extend(this.note, defaultData, noteData);
 		var notecontent = this.note.notecontent;
 		notecontent = notecontent.replace(scriptRegex, '');

@@ -5,14 +5,27 @@
 <overlay id="mknotewebclipper-browser-overlay" xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
 
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/lib/jquery-1.7.2.min.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/lib/underscore.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/lib/backbone.js" />
+
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.namespace.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.i18n.js" />
 
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.aop.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.contextmenu.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.util.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.http.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.event.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.options.js" />
+
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.filesystem.js" />    
+
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.contextmenu.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.tab.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.user.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.image.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.note.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.task.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.taskqueue.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.initialization.js" />
 
 

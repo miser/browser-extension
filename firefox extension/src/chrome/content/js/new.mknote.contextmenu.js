@@ -1,5 +1,7 @@
 ;
 (function($) {
+	var mkNoteWebclipperPopups = [],
+		i18n = MKNoteWebclipper.i18n;
 	MKNoteWebclipper.ContextMenu = function() {
 
 	}
@@ -98,141 +100,140 @@
 			default:
 				break;
 		}
+	}
 
 
 
-		function clipSelection() {
-			var self = this,
-				userSelectionText = content.getSelection().toString();
-			if (userSelectionText.trim() == '') return;
-			self.Note.saveNote(content.document.title, content.location.href, userSelectionText);
-		}
+	function clipSelection() {
+		var self = this,
+			userSelectionText = content.getSelection().toString();
+		if (userSelectionText.trim() == '') return;
+		self.Note.saveNote(content.document.title, content.location.href, userSelectionText);
+	}
 
-		function clipImage() {
-			var self = this,
-				target = gContextMenu.target;
-			self.Note.saveImgs({
-				imgs: [target],
-				title: content.document.title,
-				sourceurl: content.location.href
-			});
-		}
+	function clipImage() {
+		var self = this,
+			target = gContextMenu.target;
+		self.Note.saveImgs({
+			imgs: [target],
+			title: content.document.title,
+			sourceurl: content.location.href
+		});
+	}
 
-		function clipLink() {
-			var self = this,
-				target = gContextMenu.target;
+	function clipLink() {
+		var self = this,
+			target = gContextMenu.target;
+		if (target.tagName.toLowerCase() != 'a') {
+			target = target.parentNode;
 			if (target.tagName.toLowerCase() != 'a') {
-				target = target.parentNode;
-				if (target.tagName.toLowerCase() != 'a') {
-					return;
-				}
+				return;
 			}
-			var title = target.title || target.text || target.href,
-				noteContent = '<a href="' + self.Util.escapeHTML(target.href) + '" title="' + self.Util.escapeHTML(target.title) + '">' + self.Util.escapeHTML((target.text || target.href)) + '</a>';
-			self.Note.saveNote(title, content.location.href, noteContent);
 		}
+		var title = target.title || target.text || target.href,
+			noteContent = '<a href="' + self.Util.escapeHTML(target.href) + '" title="' + self.Util.escapeHTML(target.title) + '">' + self.Util.escapeHTML((target.text || target.href)) + '</a>';
+		self.Note.saveNote(title, content.location.href, noteContent);
+	}
 
-		function clipPageContent() {
-			var self = this,
-				title = content.document.title,
-				sourceurl = content.location.href;
-			self.Notification.show(self.i18n.getMessage('IsAnalysisPage'), false);
-			var t = new Date().getTime();
-			var noteContent = self.Popup.getHTMLByNode($(content.document.body));
-			self.Note.savePageContent(title, sourceurl, noteContent);
+	function clipPageContent() {
+		var self = this,
+			title = content.document.title,
+			sourceurl = content.location.href;
+		self.Notification.show(i18n.getMessage('IsAnalysisPage'), false);
+		var t = new Date().getTime();
+		var noteContent = self.Popup.getHTMLByNode($(content.document.body));
+		self.Note.savePageContent(title, sourceurl, noteContent);
+	}
+
+	function clipAllLinks() {
+		var self = this,
+			links = content.document.querySelectorAll('a'),
+			noteContent = '';
+		for (var i = 0, l = links.length, link; i < l; i++) {
+			link = links[i];
+			noteContent += '<a href="' + self.Util.escapeHTML(link.href) + '" title="' + self.Util.escapeHTML(link.title) + '">' + self.Util.escapeHTML(link.text) + '</a><br />';
 		}
+		self.Note.saveNote(content.document.title, content.location.href, noteContent);
+	}
 
-		function clipAllLinks() {
-			var self = this,
-				links = content.document.querySelectorAll('a'),
-				noteContent = '';
-			for (var i = 0, l = links.length, link; i < l; i++) {
-				link = links[i];
-				noteContent += '<a href="' + self.Util.escapeHTML(link.href) + '" title="' + self.Util.escapeHTML(link.title) + '">' + self.Util.escapeHTML(link.text) + '</a><br />';
+	function clipAllImages() {
+		var self = this,
+			imgs = content.document.querySelectorAll('img'),
+			filteredImg = {},
+			filteredImgTitles = [],
+			isToSave = function(url) {
+				var suffix = url.substr(url.length - 4);
+				return /^\.(gif|jpg|png)$/.test(suffix);
 			}
-			self.Note.saveNote(content.document.title, content.location.href, noteContent);
+		for (var i = 0, img, l = imgs.length, src; i < l; i++) {
+			img = imgs[i];
+			src = img.src;
+			//if(!isToSave(src)) continue;
+			if (filteredImg[src]) continue;
+			filteredImg[src] = 1;
+			filteredImgTitles.push(img.title || img.alt || '');
 		}
+		self.Note.saveImgs({
+			imgs: imgs,
+			title: content.document.title,
+			sourceurl: content.location.href
+		});
+	}
 
-		function clipAllImages() {
-			var self = this,
-				imgs = content.document.querySelectorAll('img'),
-				filteredImg = {},
-				filteredImgTitles = [],
-				isToSave = function(url) {
-					var suffix = url.substr(url.length - 4);
-					return /^\.(gif|jpg|png)$/.test(suffix);
-				}
-			for (var i = 0, img, l = imgs.length, src; i < l; i++) {
-				img = imgs[i];
-				src = img.src;
-				//if(!isToSave(src)) continue;
-				if (filteredImg[src]) continue;
-				filteredImg[src] = 1;
-				filteredImgTitles.push(img.title || img.alt || '');
-			}
-			self.Note.saveImgs({
-				imgs: imgs,
-				title: content.document.title,
-				sourceurl: content.location.href
-			});
+	function clipPageUrl() {
+		var self = this,
+			url = content.location.href,
+			title = content.document.title,
+			favIconUrl = self.getFaviconForPage(url),
+			noteContent = '<img src="' + self.Util.escapeHTML(favIconUrl.spec) + '" title="' + self.Util.escapeHTML(title) + '" alt="' + self.Util.escapeHTML(title) + '"/>' +
+				'<a href="' + self.Util.escapeHTML(url) + '" title="' + self.Util.escapeHTML(title) + '">' + self.Util.escapeHTML(url) + '</a>';
+		self.Note.saveNote(title, url, noteContent);
+	}
+
+	function newNote() {
+		createPopup();
+	}
+
+	function serializeImage(checked) {
+		var self = this;
+		self.options.serializeImg = (checked == '' ? false : true);
+	}
+
+	function saveWeibo() {
+		var self = this;
+		self.getLinkInfoByUrlWeibo(gContextMenu.target);
+	}
+
+	function createPopup() {
+		if (content.currentMaikuWebclipperPopup) return;
+		var popupStyle = 'position:fixed;right:8px;top:8px;width:450px;height:450px;min-height:304px;max-height:524px;border-radius:3px;box-shadow:0 0 5px 0 #333;overflow:hidden;z-index:20120830;',
+			popupInstance = $('<div>', {
+				mkclip: true,
+				style: popupStyle
+			}, content.document)
+				.hide()
+				.appendTo(content.document.body),
+			iframeStyle = 'width:100%;height:100%;',
+			iframe = $('<iframe>', content.document).attr('frameborder', '0').css({
+				width: '100%',
+				height: '100%'
+			}).appendTo(popupInstance),
+			iframeWin = iframe[0].contentWindow;
+		iframeWin.location.href = 'chrome://newmknotewebclipper/content/popup.xul';
+		content.currentMaikuWebclipperPopup = {
+			clipper: MKNoteWebclipper,
+			instance: popupInstance,
+			popupContext: content
 		}
+		mkNoteWebclipperPopups.push(content.currentMaikuWebclipperPopup);
+	}
 
-		function clipPageUrl() {
-			var self = this,
-				url = content.location.href,
-				title = content.document.title,
-				favIconUrl = self.getFaviconForPage(url),
-				noteContent = '<img src="' + self.Util.escapeHTML(favIconUrl.spec) + '" title="' + self.Util.escapeHTML(title) + '" alt="' + self.Util.escapeHTML(title) + '"/>' +
-					'<a href="' + self.Util.escapeHTML(url) + '" title="' + self.Util.escapeHTML(title) + '">' + self.Util.escapeHTML(url) + '</a>';
-			self.Note.saveNote(title, url, noteContent);
+	function deletePopup(popup) {
+		var self = this,
+			idx = mkNoteWebclipperPopups.indexOf(popup);
+		if (idx != -1) {
+			popup.popupContext.currentMaikuWebclipperPopup = null;
+			self.mkNoteWebclipperPopups.splice(idx, 1);
 		}
-
-		function newNote() {
-			var self = this;
-			self.createPopup();
-		}
-
-		function serializeImage(checked) {
-			var self = this;
-			self.options.serializeImg = (checked == '' ? false : true);
-		}
-
-		function saveWeibo() {
-			var self = this;
-			self.getLinkInfoByUrlWeibo(gContextMenu.target);
-		}
-
-		function createPopup() {
-			if (content.currentMaikuWebclipperPopup) return;
-			var self = this,
-				popupStyle = 'position:fixed;right:8px;top:8px;width:450px;height:450px;min-height:304px;max-height:524px;border-radius:3px;box-shadow:0 0 5px 0 #333;overflow:hidden;z-index:20120830;',
-				popupInstance = $('<div>', {
-					mkclip: true,
-					style: popupStyle
-				}, content.document)
-					.hide()
-					.appendTo(content.document.body),
-				iframeStyle = 'width:100%;height:100%;',
-				iframe = $('<iframe>', content.document).attr('frameborder', '0').css({
-					width: '100%',
-					height: '100%'
-				}).appendTo(popupInstance),
-				iframeWin = iframe[0].contentWindow;
-			iframeWin.location.href = 'chrome://newmknotewebclipper/content/popup.xul';
-			content.currentMaikuWebclipperPopup = {
-				clipper: self,
-				instance: popupInstance,
-				popupContext: content
-			}
-			self.mkNoteWebclipperPopups.push(content.currentMaikuWebclipperPopup);
-		}
-
-		function deletePopup(popup) {
-			var self = this,
-				idx = self.mkNoteWebclipperPopups.indexOf(popup);
-			if (idx != -1) {
-				popup.popupContext.currentMaikuWebclipperPopup = null;
-				self.mkNoteWebclipperPopups.splice(idx, 1);
-			}
-		},
-	})(MKNoteWebclipper.jQuery);
+	}
+})(MKNoteWebclipper.jQuery);

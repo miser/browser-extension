@@ -5,13 +5,15 @@ describe('mknote.note tests', function() {
 		Notification = MKNoteWebclipper.Notification,
 		Tips = MKNoteWebclipper.Tips,
 		Note = MKNoteWebclipper.Note,
-		HTTP = MKNoteWebclipper.HTTP;
+		HTTP = MKNoteWebclipper.HTTP,
+		FS = MKNoteWebclipper.FS;
 	var $ = MKNoteWebclipper.jQuery;
 
 	var clock, spyNotification, spyNotificationShow,
 		spyNotificationClose, spyNotificationChangeMessage, currentTipsData,
 		spyShowPersistent, spyShowTemporary, spyTipsClose,
-		xhr, requests, server, spySetState;
+		xhr, requests, server, spySetState,
+		spyFSRemove, spyFSError, spyFSCreate;
 
 	before(function() {
 		var tipsContents = {
@@ -31,9 +33,9 @@ describe('mknote.note tests', function() {
 
 		//request
 		xhr = sinon.useFakeXMLHttpRequest();
-		xhr.onCreate = function (x) {
-			console.log(x)
-		};
+		// xhr.onCreate = function(x) {
+		// 	// console.log(x)
+		// };
 		server = sinon.fakeServer.create();
 	});
 	after(function() {
@@ -59,6 +61,19 @@ describe('mknote.note tests', function() {
 		spyTipsClose = sinon.spy(Tips, "close");
 
 		spySetState = sinon.spy(MKNoteWebclipper.Event.prototype, "setState");
+
+		spyFSRemove = sinon.stub(FS, "removeFiles", function() {
+
+		});
+		spyFSError = sinon.stub(FS, "onFileError", function() {
+
+		});
+		spyFSCreate = sinon.stub(FS, "create", function(size, fileName, blob, callback, errorFn) {
+			var file = {
+				size: 1024
+			}
+			callback(file);
+		});
 	});
 	afterEach(function() {
 		clock.restore();
@@ -74,16 +89,18 @@ describe('mknote.note tests', function() {
 
 		spySetState.restore();
 
+		spyFSRemove.restore();
+		spyFSError.restore();
+		spyFSCreate.restore();
+
 		Tips.close();
 	})
 
-	var baseUrl = '';
+	var baseUrl = MKNoteWebclipper.options.baseUrl
 	describe('无图笔记', function() {
 		it('添加一篇无标题的空笔记', function() {
 			var noteData = {};
-			var note = new Note(noteData, {
-				baseUrl: baseUrl
-			})
+			var note = new Note(noteData)
 			server.respondWith("POST", baseUrl + "/note/save", [200, {},
 					'while(1);{"success":true,"data":{"Note":{"AccessLevel":0,"NoteID":"6K1hW~ksvSkq4M0pc000MP","Title":"[未命名笔记]","Content":"","UserID":1186468986,"CategoryID":"6K1hW~jhgtd0LX01I000UF","Tags":[],"CreateTime":"\/Date(1372065216702)\/","UpdateTime":"\/Date(-62135596800000)\/","ContentTypes":67,"CommentCount":0,"SaveAsCount":0,"Abstract":"","HasAttachments":true,"SourceUrl":"","Encrypted":false,"PasswordReminder":null,"Password":null,"Importance":0,"Version":"\/Date(-62135596800000)\/","Deleted":false,"EvilPoint":0,"Attachments":[],"IsCryptoText":false,"SearchText":"bdlogo2.gif  ","ResourceInlineStatus":0,"PublicUrl":"http://note.sdo.com/u/1186468986/n/6K1hW~ksvSkq4M0pc000MP","PublicShortUrl":null}}}'
 			]);
@@ -96,9 +113,6 @@ describe('mknote.note tests', function() {
 
 			server.respond();
 
-			spyShowPersistent.callCount.should.equal(2);
-			spyNotificationShow.callCount.should.equal(1);
-			spyNotificationChangeMessage.callCount.should.equal(2);
 			currentTipsData.content.should.equal('[未命名笔记] 初始化完成');
 
 			note.note.noteid.should.equal('6K1hW~ksvSkq4M0pc000MP');
@@ -115,9 +129,7 @@ describe('mknote.note tests', function() {
 			var noteData = {
 				title: title
 			};
-			var note = new Note(noteData, {
-				baseUrl: baseUrl
-			})
+			var note = new Note(noteData)
 			server.respondWith("POST", baseUrl + "/note/save", [200, {},
 					'while(1);{"success":true,"data":{"Note":{"AccessLevel":0,"NoteID":"6K1hW~ksvSkq4M0pc000MP","Title":"' + title + '","Content":"","UserID":1186468986,"CategoryID":"6K1hW~jhgtd0LX01I000UF","Tags":[],"CreateTime":"\/Date(1372065216702)\/","UpdateTime":"\/Date(-62135596800000)\/","ContentTypes":67,"CommentCount":0,"SaveAsCount":0,"Abstract":"","HasAttachments":true,"SourceUrl":"","Encrypted":false,"PasswordReminder":null,"Password":null,"Importance":0,"Version":"\/Date(-62135596800000)\/","Deleted":false,"EvilPoint":0,"Attachments":[],"IsCryptoText":false,"SearchText":"bdlogo2.gif  ","ResourceInlineStatus":0,"PublicUrl":"http://note.sdo.com/u/1186468986/n/6K1hW~ksvSkq4M0pc000MP","PublicShortUrl":null}}}'
 			]);
@@ -151,9 +163,7 @@ describe('mknote.note tests', function() {
 				title: title,
 				notecontent: content
 			};
-			var note = new Note(noteData, {
-				baseUrl: baseUrl
-			})
+			var note = new Note(noteData)
 			server.respondWith("POST", baseUrl + "/note/save", [200, {},
 					'while(1);{"success":true,"data":{"Note":{"AccessLevel":0,"NoteID":"6K1hW~ksvSkq4M0pc000MP","Title":"' + title + '","Content":"","UserID":1186468986,"CategoryID":"6K1hW~jhgtd0LX01I000UF","Tags":[],"CreateTime":"\/Date(1372065216702)\/","UpdateTime":"\/Date(-62135596800000)\/","ContentTypes":67,"CommentCount":0,"SaveAsCount":0,"Abstract":"","HasAttachments":true,"SourceUrl":"","Encrypted":false,"PasswordReminder":null,"Password":null,"Importance":0,"Version":"\/Date(-62135596800000)\/","Deleted":false,"EvilPoint":0,"Attachments":[],"IsCryptoText":false,"SearchText":"bdlogo2.gif  ","ResourceInlineStatus":0,"PublicUrl":"http://note.sdo.com/u/1186468986/n/6K1hW~ksvSkq4M0pc000MP","PublicShortUrl":null}}}'
 			]);
@@ -223,9 +233,7 @@ describe('mknote.note tests', function() {
 				title: title,
 				notecontent: content
 			};
-			var note = new Note(noteData, {
-				baseUrl: baseUrl
-			})
+			var note = new Note(noteData)
 			note.syncState.on('changeState', function(state) {
 				state.should.equal('save.images.success')
 			});
@@ -265,7 +273,7 @@ describe('mknote.note tests', function() {
 			spySetState.callCount.should.equal(1);
 		})
 	});
-	describe('无图笔记', function() {
+	describe('有图笔记', function() {
 		it('添加一篇笔记', function() {
 			var title = '图片笔记',
 				content = '<div>我是内容啊<img src="http://su.bdimg.com/static/skin/img/logo_white.png"></div>';
@@ -273,9 +281,7 @@ describe('mknote.note tests', function() {
 				title: title,
 				notecontent: content
 			};
-			var note = new Note(noteData, {
-				baseUrl: baseUrl
-			});
+			var note = new Note(noteData);
 
 			server.respondWith("POST", baseUrl + "/note/save", [200, {},
 					'while(1);{"success":true,"data":{"Note":{"AccessLevel":0,"NoteID":"6K1hW~ksvSkq4M0pc000MP","Title":"' + title + '","Content":"","UserID":1186468986,"CategoryID":"6K1hW~jhgtd0LX01I000UF","Tags":[],"CreateTime":"\/Date(1372065216702)\/","UpdateTime":"\/Date(-62135596800000)\/","ContentTypes":67,"CommentCount":0,"SaveAsCount":0,"Abstract":"","HasAttachments":true,"SourceUrl":"","Encrypted":false,"PasswordReminder":null,"Password":null,"Importance":0,"Version":"\/Date(-62135596800000)\/","Deleted":false,"EvilPoint":0,"Attachments":[],"IsCryptoText":false,"SearchText":"bdlogo2.gif  ","ResourceInlineStatus":0,"PublicUrl":"http://note.sdo.com/u/1186468986/n/6K1hW~ksvSkq4M0pc000MP","PublicShortUrl":null}}}'
@@ -301,23 +307,24 @@ describe('mknote.note tests', function() {
 			spyNotificationClose.callCount.should.equal(0);
 		})
 		it('保存图片', function() {
-
 			server.respondWith("GET", 'http://su.bdimg.com/static/skin/img/logo_white.png', [200, {
 					"Content-Length": 1024
 				}, ''
 			]);
+			server.respondWith("POST", baseUrl + '/attachment/savemany', [200, {
+					"Content-Length": 1024
+				}, 'while(1);{"success":true,"data":{"Attachment":{"NoteAttachmentID":"EyWxW~ksBqJQLs01000002","FileName":"123.png","NoteID":"EyWxW~ks0nYALs02k00001","Type":1,"FileSize":8479,"FileSizeKB":8,"FileSizeMB":0.00808620452880859375,"UserID":634977485515892858,"PreviewStatus":0,"Preview":null,"Checksum":"a611fed796dba5b9f0fad3c5cef245f5","SimpleStorageObjectID":"3MW1r~ksBqJQLs01000001","ImageHeight":"209","ImageWidth":"209","Generator":null,"FileType":3,"ExternalUrl":"http://files.notedev.sdo.com/EyWxW~ksBqJQLs01000002","Url":"http://files.notedev.sdo.com/EyWxW~ksBqJQLs01000002","IsReadable":false,"CanPreview":true,"PreviewCount":1},"Size":{"IsEmpty":false,"Width":209,"Height":209}}}'
+			]);
 
 			xhr.prototype.response = new ArrayBuffer(1024)
-			//while(1);{"success":true,"data":{"Attachment":{"NoteAttachmentID":"EyWxW~ksBqJQLs01000002","FileName":"123.png","NoteID":"EyWxW~ks0nYALs02k00001","Type":1,"FileSize":8479,"FileSizeKB":8,"FileSizeMB":0.00808620452880859375,"UserID":634977485515892858,"PreviewStatus":0,"Preview":null,"Checksum":"a611fed796dba5b9f0fad3c5cef245f5","SimpleStorageObjectID":"3MW1r~ksBqJQLs01000001","ImageHeight":"209","ImageWidth":"209","Generator":null,"FileType":3,"ExternalUrl":"http://files.notedev.sdo.com/EyWxW~ksBqJQLs01000002","Url":"http://files.notedev.sdo.com/EyWxW~ksBqJQLs01000002","IsReadable":false,"CanPreview":true,"PreviewCount":1},"Size":{"IsEmpty":false,"Width":209,"Height":209}}}
+
 			var title = '图片笔记',
 				content = '<div>我是内容啊<img src="http://su.bdimg.com/static/skin/img/logo_white.png"></div>';
 			var noteData = {
 				title: title,
 				notecontent: content
 			};
-			var note = new Note(noteData, {
-				baseUrl: baseUrl
-			});
+			var note = new Note(noteData);
 
 			note.syncState.on('changeState', function(state) {
 				state.should.equal('save.images.success')
@@ -332,6 +339,7 @@ describe('mknote.note tests', function() {
 			spyShowPersistent.callCount.should.equal(1);
 			spyNotificationShow.callCount.should.equal(1);
 			spyNotificationChangeMessage.callCount.should.equal(1);
+
 			spySetState.callCount.should.equal(1);
 			currentTipsData.content.should.equal('正在下载笔记图片...');
 		})
