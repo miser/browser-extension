@@ -58,4 +58,4 @@ function copy(origin, target) {
 exports.copy = copy;
 
 
-copy('./js', './firefox extension/src/chrome/content/js')
+copy('./js', './firefox extension/src/chrome/content/js/mknote')

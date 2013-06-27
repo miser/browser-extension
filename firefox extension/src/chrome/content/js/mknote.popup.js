@@ -67,23 +67,34 @@
                     this.clipper.i18n.localizeElement(el);
                 },
                 saveNote: function(noteData) {
-                    popupInstance.hide();
-                    self.removeInspector();
-                    let t = this;
-                    t.clipper.Note.saveNoteFromPopup(
-                        noteData.title,
-                        content.location.href,
-                        noteData.notecontent,
-                        noteData.tags,
-                        noteData.categoryid, function() {
-                        //save note success, remove staffs
-                        t.clipper.deletePopup(content.currentMaikuWebclipperPopup);
-                        $(content.document).unbind('keydown.maikuclipperpopup');
-                        popupInstance.remove();
-                    }, function() {
-                        //save note failed, show popup again
-                        popupInstance.show();
-                    });
+
+                    self.closeWin();
+                    var clipper = this.clipper,
+                        note = {
+                            title: noteData.title,
+                            sourceurl: content.location.href,
+                            notecontent: noteData.notecontent,
+                            tags: noteData.tags,
+                            categoryid: noteData.categoryid
+                        };
+                    clipper.ContextMenu.syncNote(note);
+
+                    // clipper.Note.save
+
+                    // clipper.Note.saveNoteFromPopup(
+                    //     noteData.title,
+                    //     content.location.href,
+                    //     noteData.notecontent,
+                    //     noteData.tags,
+                    //     noteData.categoryid, function() {
+                    //     //save note success, remove staffs
+                    //     t.clipper.deletePopup(content.currentMaikuWebclipperPopup);
+                    //     $(content.document).unbind('keydown.maikuclipperpopup');
+                    //     popupInstance.remove();
+                    // }, function() {
+                    //     //save note failed, show popup again
+                    //     popupInstance.show();
+                    // });
                 },
                 addNode: function() {
                     //override by iframe

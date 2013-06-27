@@ -9,23 +9,32 @@
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/lib/backbone.js" />
 
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.namespace.js" />
+
+    <!-- 麦库浏览器扩展类库 -->
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.util.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.http.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.event.js" />
+    <!-- 需要被重写的 -->
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.i18n.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.contextmenu.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.options.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.filesystem.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.tab.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.user.js" />
+
+    <!-- firefox扩展重写 -->
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote.i18n.js" />
-
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.contextmenu.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.util.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.http.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.event.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.options.js" />
-
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.filesystem.js" />    
-
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.contextmenu.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.tab.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.user.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.image.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.note.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.task.js" />
-    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.taskqueue.js" />
+
+    <!-- 麦库浏览器扩展类库 -->
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.image.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.note.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.task.js" />
+    <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/mknote/new.mknote.taskqueue.js" />
     <script type="text/javascript" src="chrome://newmknotewebclipper/content/js/new.mknote.initialization.js" />
 
 

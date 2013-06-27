@@ -1,9 +1,7 @@
 ;
 (function($) {
 	var mkNoteWebclipperPopups = [],
-		i18n = MKNoteWebclipper.i18n,
-		Task = MKNoteWebclipper.Task,
-		TaskQueue = MKNoteWebclipper.TaskQueue;
+		i18n = MKNoteWebclipper.i18n;
 	MKNoteWebclipper.ContextMenu = function() {
 
 	}
@@ -65,12 +63,6 @@
 		$('#contentAreaContextMenu').bind('popupshowing', function() {
 			initContextMenuShow(menus);
 		});
-	}
-	MKNoteWebclipper.ContextMenu.syncNode = function(note, option) {
-		option = option || {};
-		// var tags = note.tags || "";
-		// this.addTags(tags.split(','));
-		TaskQueue.add(new Task(note, option));
 	}
 
 	MKNoteWebclipper.ContextMenu.action = function(event, clipType) {
@@ -244,6 +236,4 @@
 			self.mkNoteWebclipperPopups.splice(idx, 1);
 		}
 	}
-
-
 })(MKNoteWebclipper.jQuery);
